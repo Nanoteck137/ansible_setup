@@ -4,10 +4,10 @@ dotfiles_git_repo: https://github.com/Nanoteck137/dotfiles.git
 dotfiles_git_dest: $HOME/dotfiles
 dotfiles_git_verison: main
 dotfiles_packages:
-  - alacritty
-  - shell
+  - zsh
   - nvim
   - i3
+  - alacritty
 
 neovim_install_package_url: http://10.28.28.9:8000/neovim/latest.zip
 neovim_install_package_dest: $HOME/neovim-latest.zip
