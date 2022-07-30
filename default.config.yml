@@ -2,7 +2,7 @@
 
 dotfiles_git_repo: https://github.com/Nanoteck137/dotfiles.git
 dotfiles_git_dest: $HOME/dotfiles
-dotfiles_git_verison: master
+dotfiles_git_verison: main
 dotfiles_packages:
   - alacritty
   - shell
