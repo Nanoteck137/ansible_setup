@@ -1,7 +1,7 @@
-- hosts: "servers"
+- hosts: localhost
   vars_files:
     - default.config.yml
-  
+
   pre_tasks:
     - name: Update system
       pacman:
@@ -12,9 +12,9 @@
   tasks:
     - name: Install base packages
       pacman:
-        name: 
+        name:
           - base-devel
-          - git 
+          - git
           - curl
         state: present
       become: yes
