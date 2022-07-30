@@ -1,0 +1,38 @@
+---
+- name: Install Packages for 'Neovim' (pacman)
+  pacman:
+    name: 
+      - ripgrep
+      - fd
+      - fzy
+    state: present
+  become: yes
+
+- name: Download latest Neovim build from buildserver
+  get_url:
+    url: "{{ neovim_install_package_url }}"
+    dest: "{{ neovim_install_package_dest }}" 
+  register: neovim_download
+
+- name: Unzip latest Neovim build
+  unarchive:
+    src: "{{ neovim_install_package_dest }}"
+    dest: "{{ neovim_install_archive_dest }}"
+    remote_src: yes
+
+- name: Install Neovim
+  shell:
+    cmd: "rsync -r * {{ neovim_install_dest }}"
+    chdir: "{{ neovim_install_archive_dest }}/{{ neovim_install_archive_dir }}" 
+  when: neovim_download.changed
+
+- name: Install NVIM Packer
+  git:
+    repo: "{{ neovim_install_packer_repo }}"
+    dest: "{{ neovim_install_packer_dest }}"
+  register: nvim_packer_git
+
+- name: Run NVIM PackerSync
+  shell:
+    cmd: "{{ neovim_install_dest }}/bin/nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'"
+  changed_when: false

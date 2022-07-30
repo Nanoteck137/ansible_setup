@@ -1,0 +1,20 @@
+---
+
+dotfiles_git_repo: https://github.com/Nanoteck137/dotfiles.git
+dotfiles_git_dest: $HOME/dotfiles
+dotfiles_git_verison: new-version
+dotfiles_packages:
+  - alacritty
+  - home
+  - nvim
+  - i3
+  - i3status-rust
+
+neovim_install_package_url: http://10.28.28.9:8000/neovim/latest.zip
+neovim_install_package_dest: $HOME/neovim-latest.zip
+neovim_install_archive_dest: $HOME
+# TODO(patrik): Change this
+neovim_install_archive_dir: neovim-build
+neovim_install_dest: $HOME/.local/
+neovim_install_packer_repo: https://github.com/wbthomason/packer.nvim
+neovim_install_packer_dest: $HOME/.local/share/nvim/site/pack/packer/start/packer.nvim

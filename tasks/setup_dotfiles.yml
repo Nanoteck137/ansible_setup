@@ -1,0 +1,26 @@
+---
+- name: Install Packages for 'Setup dotfiles' (pacman)
+  pacman:
+    name: 
+      - stow
+    state: present
+  become: yes
+
+- name: Create '~/.config' directories
+  file:
+    path: $HOME/.config
+    state: directory
+
+- name: Clone dotfiles
+  git:
+    repo: "{{ dotfiles_git_repo }}"
+    dest: "{{ dotfiles_git_dest }}"
+    version: "{{ dotfiles_git_verison }}"
+
+- name: Setup Stow Packages
+  stow:
+    package: '{{ item }}'
+    state: supress
+    dir: "{{ dotfiles_git_dest }}"
+    target: "$HOME"
+  with_items: "{{ dotfiles_packages }}"

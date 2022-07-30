@@ -1,0 +1,63 @@
+- hosts: buildserver
+  gather_facts: true
+  tasks:
+    - name: Install Dependencies
+      apt:
+        name:
+          - build-essential
+          - cmake
+          - pkg-config
+          - libtool-bin
+          - unzip
+          - gettext
+        state: present
+      become: yes
+
+    - name: Clone Neovim 
+      git:
+        repo: "https://github.com/neovim/neovim.git"
+        dest: $HOME/neovim
+        version: master
+      register: neovim_git
+
+    - name: Build Neovim
+      make:
+        chdir: $HOME/neovim
+        params: "CMAKE_BUILD_TYPE=Release CMAKE_INSTALL_PREFIX=$HOME/neovim-build"
+        jobs: "{{ ansible_facts['processor_vcpus'] }}"
+      when: neovim_git.changed
+
+    - name: Install Neovim
+      make:
+        chdir: /home/nanoteck137/neovim
+        target: install
+      when: neovim_git.changed
+
+    - name: Create archive for Neovim
+      archive:
+        path: $HOME/neovim-build
+        dest: $HOME/neovim-build.zip
+        format: zip
+      when: neovim_git.changed
+
+    - name: Create destination directory
+      file:
+        path: /mnt/builtapps/neovim
+        state: directory
+
+    - name: Copy Neovim archive to Builtapps share
+      copy:
+        src: $HOME/neovim-build.zip
+        dest: /mnt/builtapps/neovim/neovim-{{ neovim_git.after }}-{{ ansible_date_time.epoch }}.zip
+        force: yes
+        remote_src: yes
+      when: neovim_git.changed
+
+    - name: Update latest Neovim archive in Builtapps share
+      copy:
+        src: $HOME/neovim-build.zip
+        dest: /mnt/builtapps/neovim/latest.zip
+        force: yes
+        remote_src: yes
+      when: neovim_git.changed
+

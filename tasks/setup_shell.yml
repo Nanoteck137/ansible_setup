@@ -1,0 +1,18 @@
+---
+- name: Install Packages for 'Neovim' (pacman)
+  pacman:
+    name: 
+      - zsh
+    state: present
+  become: yes
+
+- name: Install "Oh my zsh"
+  shell:
+    cmd: 'sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended --keep-zshrc'
+    chdir: "$HOME"
+    creates: "$HOME/.oh-my-zsh"
+
+- name: Set login shell of user {{ ansible_env.USER }} to `/bin/zsh` with `usermod`
+  command: usermod --shell /bin/zsh {{ ansible_env.USER }}
+  become: true
+  changed_when: false
