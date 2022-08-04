@@ -1,10 +1,19 @@
 ---
 - name: Install Packages for 'Setup dotfiles' (pacman)
   pacman:
-    name: 
+    name:
       - stow
     state: present
   become: yes
+  when: ansible_distribution == "Archlinux"
+
+- name: Install Packages for 'Setup dotfiles' (apt)
+  apt:
+    name:
+      - stow
+    state: present
+  become: yes
+  when: ansible_distribution == "Ubuntu"
 
 - name: Create '~/.config' directories
   file:

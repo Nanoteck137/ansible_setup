@@ -1,10 +1,19 @@
 ---
-- name: Install Packages for 'Neovim' (pacman)
+- name: Install Packages for 'Shell' (pacman)
   pacman:
-    name: 
+    name:
       - zsh
     state: present
   become: yes
+  when: ansible_distribution == "Archlinux"
+
+- name: Install Packages for 'Shell' (apt)
+  apt:
+    name:
+      - zsh
+    state: present
+  become: yes
+  when: ansible_distribution == "Ubuntu"
 
 - name: Install "Oh my zsh"
   shell:

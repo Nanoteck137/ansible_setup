@@ -28,6 +28,16 @@
       become: yes
       when: ansible_distribution == "Archlinux"
 
-    # - import_tasks: tasks/setup_dotfiles.yml
-    # - import_tasks: tasks/setup_shell.yml
-    # - import_tasks: tasks/install_neovim.yml
+    - name: Install base packages (apt)
+      apt:
+        name:
+          - build-essential
+          - git
+          - curl
+        state: present
+      become: yes
+      when: ansible_distribution == "Ubuntu"
+
+    - import_tasks: tasks/setup_dotfiles.yml
+    - import_tasks: tasks/setup_shell.yml
+    - import_tasks: tasks/install_neovim.yml

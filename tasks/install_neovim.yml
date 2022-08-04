@@ -1,17 +1,28 @@
 ---
 - name: Install Packages for 'Neovim' (pacman)
   pacman:
-    name: 
+    name:
       - ripgrep
       - fd
       - fzy
     state: present
   become: yes
+  when: ansible_distribution == "Archlinux"
+
+- name: Install Packages for 'Neovim' (apt)
+  apt:
+    name:
+      - ripgrep
+      - fd-find
+      - fzy
+    state: present
+  become: yes
+  when: ansible_distribution == "Ubuntu"
 
 - name: Download latest Neovim build from buildserver
   get_url:
     url: "{{ neovim_install_package_url }}"
-    dest: "{{ neovim_install_package_dest }}" 
+    dest: "{{ neovim_install_package_dest }}"
   register: neovim_download
 
 - name: Unzip latest Neovim build
@@ -23,7 +34,7 @@
 - name: Install Neovim
   shell:
     cmd: "rsync -r * {{ neovim_install_dest }}"
-    chdir: "{{ neovim_install_archive_dest }}/{{ neovim_install_archive_dir }}" 
+    chdir: "{{ neovim_install_archive_dest }}/{{ neovim_install_archive_dir }}"
   when: neovim_download.changed
 
 - name: Install NVIM Packer
