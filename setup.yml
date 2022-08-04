@@ -3,11 +3,12 @@
     - default.config.yml
 
   pre_tasks:
-    - name: Update system
+    - name: Update system (pacman)
       pacman:
         update_cache: yes
         upgrade: yes
       become: yes
+      when: ansible_distribution == "Archlinux"
 
   tasks:
     - name: Install base packages
@@ -18,7 +19,8 @@
           - curl
         state: present
       become: yes
+      when: ansible_distribution == "Archlinux"
 
-    - import_tasks: tasks/setup_dotfiles.yml
-    - import_tasks: tasks/setup_shell.yml
-    - import_tasks: tasks/install_neovim.yml
+    # - import_tasks: tasks/setup_dotfiles.yml
+    # - import_tasks: tasks/setup_shell.yml
+    # - import_tasks: tasks/install_neovim.yml
